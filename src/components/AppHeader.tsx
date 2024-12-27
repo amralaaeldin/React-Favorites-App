@@ -1,10 +1,9 @@
-import React from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 
 const { Header } = Layout;
 
-const AppHeader: React.FC = () => {
+const AppHeader = () => {
   const isAuthenticated = () => {
     return false;
   };

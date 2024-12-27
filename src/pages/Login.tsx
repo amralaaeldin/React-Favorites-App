@@ -1,9 +1,8 @@
-import React from "react";
 import { Form, Input, Button, Card, Typography, Checkbox } from "antd";
 
 const { Title } = Typography;
 
-const Login: React.FC = () => {
+const Login = () => {
   const onFinish = (values: any) => {
     console.log("Success:", values);
   };

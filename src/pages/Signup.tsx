@@ -1,9 +1,8 @@
-import React from "react";
 import { Form, Input, Button, Card, Typography } from "antd";
 
 const { Title } = Typography;
 
-const Signup: React.FC = () => {
+const Signup = () => {
   const onFinish = (values: any) => {
     console.log("Success:", values);
   };
@@ -33,14 +32,6 @@ const Signup: React.FC = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: "Please input your name!" }]}
-          >
-            <Input placeholder="Enter your name" />
-          </Form.Item>
-
           <Form.Item
             label="Email"
             name="email"

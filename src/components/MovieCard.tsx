@@ -1,18 +1,8 @@
 import { useState } from "react";
-import {
-  Card,
-  Col,
-  Button,
-  Typography,
-  message,
-  Modal,
-  Form,
-  Input,
-} from "antd";
+import { Card, Col, Button, Typography, message, Modal, Input } from "antd";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
-import axios from "axios";
 import { Item } from "../types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import api from "../services/api";
 
 const { Text, Paragraph } = Typography;

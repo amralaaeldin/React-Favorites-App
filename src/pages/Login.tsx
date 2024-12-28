@@ -1,14 +1,47 @@
-import { Form, Input, Button, Card, Typography, Checkbox } from "antd";
+import { Form, Input, Button, Card, Typography, Checkbox, message } from "antd";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const { Title } = Typography;
 
 const Login = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+
+  const onFinish = async (values: any) => {
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_SERVER_URI + "/login",
+        values
+      );
+
+      if (response.status === 200) {
+        const { accessToken, refreshToken } = response.data;
+
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+        message.success("Login successful!");
+        navigate("/");
+      } else {
+        message.error("Unexpected error. Please try again.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const errorMsg =
+          error.response.data.message || "Login failed. Please try again.";
+        message.error(errorMsg);
+      } else {
+        message.error(
+          "Network error. Please check your connection and try again."
+        );
+      }
+    }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = () => {
+    message.error("Please fill in all required fields.");
   };
 
   return (

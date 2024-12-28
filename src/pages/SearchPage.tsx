@@ -2,29 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { Input, Typography, Spin, Pagination, message } from "antd";
 import MovieList from "../components/MovieList";
 import { Item } from "../types";
-import axios from "axios";
+import api from "../services/api";
 
 const { Title } = Typography;
 const { Search } = Input;
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: 1,
-      title: "Item 1",
-      description: "Description for Item 1",
-      image: "https://via.placeholder.com/200?text=Item+1",
-      year: 2023,
-    },
-    {
-      id: 2,
-      title: "Item 2",
-      description: "Description for Item 2",
-      image: "https://via.placeholder.com/200?text=Item+2",
-      year: 2022,
-    },
-  ]);
+  const [items, setItems] = useState<Item[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,10 +36,11 @@ const SearchPage = () => {
     if (!query) return;
     setLoading(true);
     try {
-      const response = await axios.get("https://api.example.com/items", {
-        params: { search: query, page },
+      const response = await api.get("/movies", {
+        params: { s: query, page },
       });
-      setItems(response.data.items);
+
+      setItems(response.data.data);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       message.error("Failed to fetch items. Please try again later.");
@@ -88,7 +74,7 @@ const SearchPage = () => {
           enterButton="Search"
           size="large"
           onChange={(e) => handleSearch(e.target.value)}
-          style={{ maxWidth: "400px", margin: "0 auto" }}
+          style={{ maxWidth: "400px", margin: "40px auto" }}
         />
       </div>
       {isTyping || loading ? (
@@ -100,15 +86,17 @@ const SearchPage = () => {
           <MovieList items={items} />
           <Pagination
             current={currentPage}
-            total={totalPages * 10} // Assuming 10 items per page
-            pageSize={10}
+            total={items.length * totalPages}
+            pageSize={items.length}
             onChange={handlePageChange}
             style={{ textAlign: "center", marginTop: "20px" }}
           />
         </>
       ) : (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Typography.Text>No items found</Typography.Text>
+          <Typography.Text>
+            No items found, Let's start searching!{" "}
+          </Typography.Text>
         </div>
       )}
     </div>

@@ -2,38 +2,23 @@ import { useState, useEffect } from "react";
 import { Typography, Spin, Pagination, message } from "antd";
 import MovieList from "../components/MovieList";
 import { Item } from "../types";
-import axios from "axios";
+import api from "../services/api";
 
 const { Title } = Typography;
 
 const Favorites = () => {
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: 1,
-      title: "Item 1",
-      description: "Description for Item 1",
-      image: "https://via.placeholder.com/200?text=Item+1",
-      year: 2023,
-    },
-    {
-      id: 2,
-      title: "Item 2",
-      description: "Description for Item 2",
-      image: "https://via.placeholder.com/200?text=Item+2",
-      year: 2022,
-    },
-  ]);
+  const [items, setItems] = useState<Item[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchItems = async (page: number) => {
     setLoading(true);
     try {
-      const response = await axios.get("https://api.example.com/items", {
-        params: { search: page },
+      const response = await api.get("/favorites", {
+        params: { page },
       });
-      setItems(response.data.items);
+      setItems(response.data.data);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       message.error("Failed to fetch items. Please try again later.");
@@ -71,8 +56,8 @@ const Favorites = () => {
           <MovieList items={items} />
           <Pagination
             current={currentPage}
-            total={totalPages * 10} // Assuming 10 items per page
-            pageSize={10}
+            total={items.length * totalPages}
+            pageSize={items.length}
             onChange={handlePageChange}
             style={{ textAlign: "center", marginTop: "20px" }}
           />

@@ -1,14 +1,42 @@
-import { Form, Input, Button, Card, Typography } from "antd";
+import { Form, Input, Button, Card, Typography, message } from "antd";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const Signup = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+
+  const onFinish = async (values: any) => {
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_SERVER_URI + "/signup",
+        values
+      );
+
+      if (response.status === 201) {
+        message.success("Signup successful! Please log in.").then(() => {
+          navigate("/login");
+        });
+      } else {
+        message.error("Unexpected error. Please try again.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const errorMsg =
+          error.response.data.message.join(", ") ||
+          "Signup failed. Please try again.";
+        message.error(errorMsg);
+      } else {
+        message.error(
+          "Network error. Please check your connection and try again."
+        );
+      }
+    }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = () => {
+    message.error("Please fill in all required fields.");
   };
 
   return (

@@ -10,7 +10,7 @@ const Signup = () => {
   const onFinish = async (values: any) => {
     try {
       const response = await axios.post(
-        import.meta.env.VITE_SERVER_URI + "/signup",
+        import.meta.env.VITE_SERVER_URL + "/signup",
         values
       );
 

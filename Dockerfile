@@ -14,8 +14,8 @@ RUN npm install
 COPY . .
 
 # Add these lines to handle build-time env variables
-ARG VITE_SERVER_URL
-ENV VITE_SERVER_URL=$VITE_SERVER_URL
+ARG VITE_SERVER_URI
+ENV VITE_SERVER_URI=$VITE_SERVER_URI
 
 # Build the React app
 RUN npm run build

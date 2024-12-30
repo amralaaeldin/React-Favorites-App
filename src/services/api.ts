@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL,
+  baseURL: import.meta.env.VITE_SERVER_URI,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",
